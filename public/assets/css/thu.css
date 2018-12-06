@@ -1,0 +1,13 @@
+.tabs .nav-tabs .nav-link.active, .tabs .nav-tabs .nav-link:hover {
+	background: linear-gradient(45deg,rgba(71,201,229,0.9) 0,rgba(102,252,233,0.9) 100%)!important;
+	border: 1px solid rgba(71,201,229,0.9) !important;
+}
+
+.service:hover .content-title > a, .aboutdata:hover .about-title {
+	color: rgba(71,201,229,0.9)!important;
+}
+
+.product-actions .add .add-to-cart:hover{
+	background-color: rgba(102,252,233,0.9) !important;
+}
+
