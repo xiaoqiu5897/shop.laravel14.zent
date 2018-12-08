@@ -9,7 +9,7 @@
 			</div>
 			<!-- /.card-header --> 
 			<div class="card-body">
-				<button  type="button" class="btn btn-danger" data-toggle="modal" data-target=".bd-example-modal-lg"  style="margin-left: 500px; margin-top: 20px;">Thêm</button>
+				<button  type="button" class="btn btn-danger" id="btn-add" style="margin-left: 500px; margin-top: 20px;">Thêm</button>
 				<table id="product-table" class="table table-bordered table-striped data-list">
 					<thead>
 						<tr>
@@ -29,47 +29,56 @@
 			</div>
 			<!-- /.card-body -->
 		</div>
+
+		
 		<!-- /.card -->
 	</div>
 	<!-- /.col -->
 </div>
 <!-- /.row -->
 {{-- modal thêm mới --}}
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
+<div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content"  style="padding: 20px 20px 20px;">
-			<h1>ZENTGROUP - PHP - Thêm sản phẩm</h1>
-			<form action="" method="POST" enctype="multipart/form-data">
+			<h1>ZENT - LARAVEL - Thêm sản phẩm</h1>
+			<form id="form-add" data-url="{{route('products.store')}}" method="POST" enctype="multipart/form-data">
 				<div class="form-group">
-					<label for="exampleInputEmail1">Mã sản phẩm <span>*</span></label>
-					<input name="MA_SP" type="text" class="form-control" id="exampleInputEmail1" placeholder="Mã sản phẩm" required>
+					<label for="">Mã sản phẩm <span>*</span></label>
+					<input name="" type="text" class="form-control" id="add-code" required>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputPassword1">Tên sản phẩm <span>*</span></label>
-					<input name="TEN_SP" type="text" class="form-control" id="exampleInputPassword1" placeholder="Tên sản phẩm" required>
+					<label for="">Tên sản phẩm <span>*</span></label>
+					<input name="" type="text" class="form-control" id="add-name" required>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputPassword1">Số lượng <span>*</span></label>
-					<input name="SO_LUONG" type="text" class="form-control" id="exampleInputPassword1" placeholder="Số lượng" required>
+					<label for="">Số lượng <span>*</span></label>
+					<input name="" type="text" class="form-control" id="add-quantity" required>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputPassword1">Gía nhập <span>*</span></label>
-					<input name="GIA_NHAP" type="text" class="form-control" id="exampleInputPassword1" placeholder="Gía nhập" required>
+					<label for="">Giá nhập (VNĐ)<span>*</span></label>
+					<input name="" type="text" class="form-control" id="add-cost" required>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputPassword1">Gía bán <span>*</span></label>
-					<input name="GIA_BAN" type="text" class="form-control" id="exampleInputPassword1" placeholder="Gía bán" required>
+					<label for="">Giá bán (VNĐ)<span>*</span></label>
+					<input name="" type="text" class="form-control" id="add-price" required>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputPassword1">Ảnh <span>*</span></label>
-					<input name="ANH_SP" type="file" class="form-control" id="exampleInputPassword1" placeholder="Gía bán" required>
+					<label for="">Giá khuyến mãi (VNĐ)<span>*</span></label>
+					<input name="" type="text" class="form-control" id="add-price-sale" required>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputPassword1">Loại sản phẩm <span>*</span></label>
-					<select name="MA_LOAI_SP">
-					</select>
+					<label for="">Mô tả <span>*</span></label>
+					<textarea name="" type="text" class="form-control" id="add-description"></textarea>
 				</div>
-				<button name="save"  type="submit" class="btn btn-danger">Lưu thông tin</button>
+				<div class="form-group">
+					<label for="">Loại sản phẩm <span>*</span></label>
+					<div class="add-category row"></div>
+				</div>
+				<div class="form-group">
+					<label for="">Thuộc tính <span>*</span></label>
+					<div class="add-attribute row"></div>
+				</div>
+				<button type="submit" class="btn btn-danger">Lưu thông tin</button>
 			</form>
 		</div>
 	</div>
@@ -140,11 +149,7 @@
 					</div>
 					<div class="form-group col-12">
 						<label for="">Ảnh</label>
-						<div class="col-md-12 col-sm-12 row">
-							<div class="col-6 edit-image1" >
-							</div>
-							<div class="col-6 edit-image2">
-							</div>
+						<div class="col-md-12 col-sm-12 row edit-image">
 						</div>
 					</div>
 					<div class="form-group col-12">
@@ -196,8 +201,7 @@
 	$(document).on('click', '.btn-edit', function(){
 		$('#modal-edit').modal('show');
 		var url = $(this).attr('data-url');
-		$('.edit-image1').html('');
-		$('.edit-image2').html('');
+		$('.edit-image').html('');
 		$('.edit-category').html('');
 		$('.edit-attribute').html('');
 		$.ajax({
@@ -214,11 +218,7 @@
 				$('#editor-edit').val(response.product.description);
 				//hiển thị ảnh trong modal edit
 				$.each(response.product.images, function( key, value ) {
-					if(key < 3){
-						$('.edit-image1').append('<div><button class="btn btn-dark btn-del-img" style="position:absolute;z-index:3;right:10px" data-image-id="'+ value.id +'" style="margin-left:93%"><i class="fa fa-times" style="font-size:30px"></i></button><img id="img-'+ value.id +'" src="{{asset('assets/img/products')}}/' + value.link + '" style="width:100%; height: 400px; background:#f4f4f4; margin-bottom: 20px;position:relative"></div>');
-					}if(key>= 3){
-						$('.edit-image2').append('<div><button class="btn btn-dark btn-del-img" style="position:absolute;z-index:3;right:10px"  data-image-id="'+ value.id +'" style="margin-left:93%"><i class="fa fa-times" style="font-size:30px"></i></button><img id="img-'+ value.id +'" src="{{asset('assets/img/products')}}/' + value.link + '" style="width:100%; height: 400px; background:#f4f4f4; margin-bottom: 20px;position:relative"></div>');
-					}
+					$('.edit-image').append('<div class="col-6"><button class="btn btn-dark btn-del-img" style="position:absolute;z-index:3;right:10px" id="btn-'+value.id+'" data-image-id="'+ value.id +'" style="margin-left:93%"><i class="fa fa-times" style="font-size:30px"></i></button><img id="img-'+ value.id +'" src="{{asset('assets/img/products')}}/' + value.link + '" style="width:100%; height: 350px; background:#f4f4f4; margin-bottom: 20px;position:relative"></div>');
 				}); 
 				//hiển thị category trong modal edit
 				$.each(response.categories, function( key, value1 ) {
@@ -302,62 +302,144 @@
 		var imageID = $(this).attr('data-image-id');
 		var productID = $(this).attr('data-product-id');
 		var url = $(this).attr('data-url');
+		swal({
+			title: "Are you sure?",
+			text: "Once deleted, you will not be able to recover this imaginary file!",
+			icon: "warning",
+			buttons: true,
+			dangerMode: true,
+		})
+		.then((willDelete) => {
+			if (willDelete) {
+				$.ajax({
+					type: 'delete',
+					url: '/admin/products/' + productID +'/edit/deleteimage?imageID=' + imageID,
+					success: function (response) {
+						$('#modal-edit').show();
+						swal("Poof! Your imaginary file has been deleted!", {
+							icon: "success",
+						});
+						$('.edit-image #img-'+response.imageID+'').remove();
+						$('.edit-image #btn-'+response.imageID+'').remove();
+						console.log(response);
+					}
+				})
+			} else {
+				swal("Your imaginary file is safe!");
+			}
+		});
+	})
+</script>
+{{-- bắt sự kiện cho nút thêm mới --}}
+<script type="text/javascript">
+	$(document).on('click','#btn-add', function () {
+		$('#modal-add').modal('show');
+		$('.add-category').html();
+		$('.add-attribute').html();
+		$('.add-sm-category').html();
 		$.ajax({
-			type: 'delete',
-			url: '/admin/products/' + productID +'/edit/deleteimage?id=' + imageID,
+			type: 'get',
+			url: '/admin/products/create',
 			success: function (response) {
-				$('#modal-edit').show();
-				console.log(response);
+				$.each(response.categories, function( key, value1 ) {
+					if(value1.parent_id == null){
+						$('.add-category').append('<div class="col-md-3 add-category1"><input id="'+value1.id+'" type="checkbox" value="'+value1.parent_id+'">&nbsp&nbsp'+value1.name+'<br><div class="add-sm-category"></div></div>')
+						$.each(response.categories, function( key, value2 ) {
+							if (value2.parent_id != null && value2.parent_id == value1.id) {
+								$('.add-sm-category').append('<input class="add-category1" style="margin-left:20px" parent_id="'+value2.parent_id+'" id="'+value1.id+'" type="checkbox" value="'+value2.id+'">&nbsp&nbsp'+value2.name+'<br>')
+							}
+						});
+					}
+				});
+				$.each(response.attributes, function (key,value) {
+					$('.add-attribute').append('<div class="col-1"><label for="" style="margin-bottom: 30px">'+value.name+' </label></div><div class="col-4"><input id="'+value.id+'" style="margin-bottom: 10px" type="text" class="form-control add-'+value.name+'" required ></div><div class="col-7"></div>')
+				})
 			}
 		})
 	})
 </script>
-<!-- <script type="text/javascript">
-	$(function () {
-		$("div#awesome-dropzone").dropzone({ url: "/uploadImg" });
-		Dropzone.options.dropzone =
-		{
-			maxFilesize: 12,
-			renameFile: function(file) {
-				var dt = new Date();
-				var time = dt.getTime();
-				return time+file.name;
-			},
-			acceptedFiles: ".jpeg,.jpg,.png,.gif",
-			addRemoveLinks: true,
-			timeout: 50000,
-			removedfile: function(file) 
-			{
-				var name = file.upload.filename;
-				$.ajax({
-					headers: {
-                                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                            },
-					type: 'POST',
-					url: '{{-- {{ url("image/delete") }} --}}',
-					data: {filename: name},
-					success: function (data){
-						console.log("File has been successfully removed!!");
-					},
-					error: function(e) {
-						console.log(e);
-					}});
-				var fileRef;
-				return (fileRef = file.previewElement) != null ? 
-				fileRef.parentNode.removeChild(file.previewElement) : void 0;
-			},
-
-			success: function(file, response) 
-			{
-				console.log(response);
-			},
-			error: function(file, response)
-			{
-				return false;
+{{-- bắt sự kiện cho nút submit form thêm mới --}}
+<script type="text/javascript">
+	$(document).on('submit','#form-add',function (e) {
+		e.preventDefault();
+		var url = $(this).attr('data-url');
+		$('.add-category1').each(function () {
+			if($(this).is(":checked")) {
+				category = $(this).val();
 			}
-		};
+		})
+		$.ajax({
+			type: 'post',
+			url: url,
+			data: {
+				code: $('#add-code').val(),
+				name: $('#add-name').val(),
+				cost: $('#add-cost').val(),
+				price: $('#add-price').val(),
+				pricesale: $('#add-price-sale').val(),
+				quantity: $('#add-quantity').val(),
+				description: $('#add-description').val(),
+				weight: {
+					id:  $('.add-weight').attr('id'),//gửi thuộc tính weight gồm có id và value
+					value: $('.add-weight').val(),
+				},
+				color: {
+					id:  $('.add-color').attr('id'),
+					value: $('.add-color').val(),
+				},
+				material: {
+					id: $('.add-material').attr('id'),
+					value: $('.add-material').val(),
+				},
+				origin: {
+					id: $('.add-origin').attr('id'),
+					value: $('.add-origin').val(),
+				},
+				category: category,
+			},
+			success:function (response) {
+				$('#modal-add').modal('hide');
+				swal({
+					title: "Thành công!",
+					text: "Thêm mới sản phẩm thành công",
+					icon: "success",
+					button: "OK",
+				});
+
+			}
+		})
 	})
-</script>  -->
+</script>
+<script type="text/javascript">
+	$(document).on('click','.btn-delete',function () {
+		var url = $(this).attr('data-url');
+		swal({
+			title: "Are you sure?",
+			text: "Once deleted, you will not be able to recover this imaginary file!",
+			icon: "warning",
+			buttons: true,
+			dangerMode: true,
+		})
+		.then((willDelete) => {
+			if (willDelete) {
+				$.ajax({
+					type: 'delete',
+					url: url,
+					success: function (response) {
+						swal("Poof! Your imaginary file has been deleted!", {
+							icon: "success",
+						});
+						$('.edit-image #img-'+response.imageID+'').remove();
+						$('.edit-image #btn-'+response.imageID+'').remove();
+						console.log(response);
+					}
+				})
+			} else {
+				swal("Your imaginary file is safe!");
+			}
+		});
+	})
+</script>
 @endsection
 
 

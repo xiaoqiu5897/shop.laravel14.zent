@@ -50,15 +50,15 @@
 																		<li class="item col-xs-12">
 																			<div class="product-miniature js-product-miniature" data-id-product="1" data-id-product-attribute="1" itemscope itemtype="http://schema.org/Product">
 																				<div class="thumbnail-container">
-																					<a href="{{asset('')}}product/{{$product->slug}}" class="thumbnail product-thumbnail">
+																					<a href="{{asset('')}}product/{{$product->id}}" class="thumbnail product-thumbnail">
 																						@foreach($product->images as $key => $image)
 																						<?php if($key == 0){ ?>
-																						<img
+																						<img style="height: 260px"
 																						src = "{{asset('assets/img/products')}}/{{$image->link}}"
 																						alt = ""
 																						data-full-size-image-url = "{{asset('assets/img/products')}}/{{$image->link}}">
 																						<?php } if ($key == 4) {?>
-																						<img class="replace-2x img_1 img-responsive" src="{{asset('assets/img/products')}}/{{$image->link}}" data-full-size-image-url="{{asset('assets/img/products')}}/{{$image->link}}" alt="" />
+																						<img style="height: 270px" class="replace-2x img_1 img-responsive" src="{{asset('assets/img/products')}}/{{$image->link}}" data-full-size-image-url="{{asset('assets/img/products')}}/{{$image->link}}" alt="" />
 																						<?php } ?>
 																						@endforeach
 																					</a>

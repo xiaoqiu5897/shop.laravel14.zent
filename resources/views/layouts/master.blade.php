@@ -162,71 +162,24 @@
 						{{-- quick view giỏ hàng --}}
 						<div class="cart_block block exclusive dropdown-menu cart-quick-view">
 							<div class="block_content">
-								<div class="cart_block_list">
-									<div class="cart-item">					
-										<div class="cart-image">
-											<a href="">
-												<img src="">
-											</a>
-										</div>
-
-										<div class="cart-info">
-											<span class="product-quantity">1&nbsp;x</span>
-											<span class="product-name"><a href="">Nullam...</a></span>
-											<span class="product-price">$23.20</span>
-											<a class = "remove-from-cart"
-											rel                         = "nofollow"
-											href                        = "https://thememagics.com/prestashop/PRS05/PRS050097/fashion/index.php?controller=cart&amp;delete=1&amp;id_product=3&amp;id_product_attribute=13&amp;token=0a3246eb643072361cce794754902474"
-											data-link-action            = "delete-from-cart"
-											data-id-product             = "3"
-											data-id-product-attribute   = "13"
-											data-id-customization   	  = ""
-											>
-											<i class="material-icons pull-xs-left">delete</i></a>
-										</div>
-									</div>
-
-									<div class="cart-item">					
-										<div class="cart-image">
-											<a href="https://thememagics.com/prestashop/PRS05/PRS050097/fashion/index.php?id_product=5&amp;id_product_attribute=19&amp;rewrite=today-is-a-good-day-framed-poster&amp;controller=product&amp;id_lang=1#/19-dimension-40x60cm">
-												<img src="https://thememagics.com/prestashop/PRS05/PRS050097/fashion/img/p/2/0/3/203-cart_default.jpg" alt="Aliquam Suscipit">
-											</a>
-										</div>
-
-										<div class="cart-info">
-											<span class="product-quantity">1&nbsp;x</span>
-											<span class="product-name"><a href="https://thememagics.com/prestashop/PRS05/PRS050097/fashion/index.php?id_product=5&amp;id_product_attribute=19&amp;rewrite=today-is-a-good-day-framed-poster&amp;controller=product&amp;id_lang=1#/19-dimension-40x60cm">Aliquam...</a></span>
-											<span class="product-price">$29.00</span>
-											<a class = "remove-from-cart" rel= "nofollow" href= "" data-link-action= "delete-from-cart" data-id-product= "5" data-id-product-attribute= "19" data-id-customization= "">
-												<i class="material-icons pull-xs-left">delete</i>
-											</a>
-										</div>
-									</div>
+								<div class="cart_block_list" id="cart-item">
 								</div>
 								<div class="card cart-summary">
 									<div class="card-block">
 										<div class="cart-summary-line" id="cart-subtotal-products">
-											<span class="label js-subtotal">
-												2 items
-											</span>
-											<span class="value">$52.20</span>
+											<span class=" js-subtotal"><span class="view-cart-quantity"></span> items</span>
+											<span class="value view-cart-subtotal"></span>
 										</div>
 										<div class="cart-summary-line" id="cart-subtotal-shipping">
-											<span class="label">
-												Shipping
-											</span>
-											<span class="value">$7.00</span>
+											<span class="">Taxes</span>
+											<span class="value view-cart-taxes"></span>
 											<div><small class="value"></small></div>
 										</div>
 									</div>
 									<div class="card-block">
 										<div class="cart-summary-line cart-total">
-											<span class="label">Total (tax excl.)</span>
-											<span class="value">$59.20</span>
-										</div>
-										<div class="cart-summary-line">
-											<small class="label">Taxes</small>
-											<small class="value">$0.00</small>
+											<span class="">Total</span>
+											<span class="value view-cart-total"></span>
 										</div>
 									</div>
 								</div>
@@ -238,6 +191,11 @@
 										<button type="button" class="btn btn-primary add-to-cart">Checkout</button>
 									</a>
 								</div>
+								<style type="text/css">
+									.add-to-cart:hover{
+										background-color: rgba(71,201,229,0.9)!important;
+									}
+								</style>
 							</div>
 						</div>
 					</div>

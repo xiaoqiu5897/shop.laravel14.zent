@@ -30,7 +30,7 @@
                   <div class="cart-overview js-cart" data-refresh-url="">
                     <ul class="cart-items">
                       @foreach(Cart::content() as $row)
-                      <li class="cart-item">
+                      <li class="cart-item" id="cart-item-{{$row->rowId}}">
                         <div class="product-line-grid row">
                           <!--  product left content: image-->
                           @if($row->options->has('thumbnail'))
@@ -46,8 +46,8 @@
                               <a href="">{{$row->name}}</a>
                             </div>
                             <div class="product-line-info">
-                              <span class="value" style="text-decoration: line-through;">{{number_format($row->price)}}</span>
-                              <span class="value" >{{number_format($row->options->price_sale)}}</span>
+                              <span class="value" style="text-decoration: line-through;">{{number_format($row->options->price)}}</span>
+                              <span class="value" >{{number_format($row->price)}}</span>
                             </div>
                             <br/>
                             @if($row->options->has('size'))
@@ -75,73 +75,73 @@
                                 </div>
                                 <div class="col-md-6 col-xs-6 price">
                                   <span class="product-price">
-                                    <strong id="subtotal-{{$row->rowId}}">{{number_format($row->subtotal)}}</strong>
+                                    <strong id="subtotal-{{$row->rowId}}">{{number_format($row->price*$row->qty)}}</strong>
                                   </span>
                                 </div>
                               </div>
                             </div>
                             <div class="col-md-2 col-xs-2 text-xs-right">
                               <div class="cart-line-product-actions ">
-                                <a class="remove-from-cart" rel="nofollow" href= "" data-link-action= delete-from-cart" data-id-product= "3" data-id-product-attribute= "13" data-id-customization= "" >
-                                  <i class="fa fa-times"></i>
-                                </a>
-                              </div>
+                                <button class="remove-from-cart remove-cart" data-rowId="{{$row->rowId}}" style="background-color: white;border: none"><i class="fa fa-times"></i></button>
+
+                              </a>
                             </div>
                           </div>
                         </div>
-                        <div class="clearfix"></div>
                       </div>
-                    </li>
-                    @endforeach
-                  </ul>
+                      <div class="clearfix"></div>
+                    </div>
+                  </li>
+                  @endforeach
+                </ul>
+              </div>
+            </div>
+
+
+
+          </div>
+          <!-- Right Block: cart subtotal & cart total -->
+          <div class="cart-grid-right col-xs-12 col-lg-4">
+            <div class="card cart-summary">
+              <div class="cart-detailed-totals" style="font-size: 20px">
+                <div class="card-block">
+                  <div class="cart-summary-line" id="cart-subtotal-products">
+                    <span class=" js-subtotal cart-count">{{\Cart::count()}} item</span>
+                    <span class="value cart-subtotal">{{\Cart::subtotal()}}</span>
+                  </div>
+                  <div class="cart-summary-line" id="cart-subtotal-shipping">
+                    <span class="">Taxes</span>
+                    <span class="value cart-tax">{{\Cart::tax()}}</span>
+                    <div><small class="value"></small></div>
+                  </div>
                 </div>
+                <hr>
+                <div class="card-block">
+                  <div class="cart-summary-line cart-total" style="font-weight: bolder;">
+                    <span class="">Total </span>
+                    <span class="value cart-total" style="color: red">{{\Cart::total()}}</span>
+                  </div>
+                </div>
+                <hr>
               </div>
 
-
-
-            </div>
-            <!-- Right Block: cart subtotal & cart total -->
-            <div class="cart-grid-right col-xs-12 col-lg-4">
-              <div class="card cart-summary">
-                <div class="cart-detailed-totals" style="font-size: 20px">
-                  <div class="card-block">
-                    <div class="cart-summary-line" id="cart-subtotal-products">
-                      <span class=" js-subtotal cart-count">{{\Cart::count()}} item</span>
-                      <span class="value cart-subtotal">{{\Cart::subtotal()}}</span>
-                    </div>
-                    <div class="cart-summary-line" id="cart-subtotal-shipping">
-                      <span class="">Taxes</span>
-                      <span class="value cart-tax">{{\Cart::tax()}}</span>
-                      <div><small class="value"></small></div>
-                    </div>
-                  </div>
-                  <hr>
-                  <div class="card-block">
-                    <div class="cart-summary-line cart-total" style="font-weight: bolder;">
-                      <span class="">Total </span>
-                      <span class="value cart-total" style="color: red">{{\Cart::total()}}</span>
-                    </div>
-                  </div>
-                  <hr>
-                </div>
-
-                <style type="text/css">
-                .checkout-btn:hover{
-                  background-color: rgba(102,252,233,0.9)!important;
-                  color: black;
-                }
-              </style>
-              <div class="checkout cart-detailed-actions card-block more">
-                <div class="text-xs-center">
-                  <a href="{{asset('cart/checkout')}}" class="btn btn-primary add-to-cart checkout-btn">Checkout</a>
-                </div>
+              <style type="text/css">
+              .checkout-btn:hover{
+                background-color: rgba(102,252,233,0.9)!important;
+                color: black;
+              }
+            </style>
+            <div class="checkout cart-detailed-actions card-block more">
+              <div class="text-xs-center">
+                <a href="{{asset('cart/checkout')}}" class="btn btn-primary add-to-cart checkout-btn">Checkout</a>
               </div>
             </div>
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   </div>
+</div>
 </div>  
 </div>
 </section>
@@ -160,15 +160,54 @@
       type: 'get',
       url: '/cart/add?rowId=' + rowId + '&status=' + status,
       success: function (response) {
+        console.log(response);
         $('#qty-' + rowId).val(response.detail.qty);
-        $('#subtotal-' + rowId).html(response.detail.price_sale * response.detail.qty);
+        $('#subtotal-' + rowId).html(response.detail.price * response.detail.qty);
         $('.cart-tax').html(response.tax);
         $('.cart-count').html(response.count + ' item');
         $('.cart-subtotal').html(response.subtotal);
-        $('.cart-total').html(response.total);
+        $('.cart-total').html('Total '+response.total);
+        if (response.status == 1) {
+          $('cart-item-'+response.detail.id+'').remove();
+        }
       }
     })
   })
 })
+</script>
+
+<script type="text/javascript">
+  $(document).on('click','.remove-cart',function (e) {
+   e.preventDefault();
+   var rowId = $(this).attr('data-rowId');
+   console.log(rowId);
+   swal({
+    title: "Are you sure?",
+    text: "Once deleted, you will not be able to recover this product!",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+   .then((willDelete) => {
+    if (willDelete) {
+      $.ajax({
+        type: 'delete',
+        url: '/cart/'+rowId,
+        success: function (response) {
+          swal("Poof! Your product has been deleted from cart!", {
+            icon: "success",
+          });
+          $('#cart-item-'+response.rowId+'').remove();
+          $('.cart-tax').html(response.tax);
+          $('.cart-count').html(response.count + ' item');
+          $('.cart-subtotal').html(response.subtotal);
+          $('.cart-total').html('Total '+response.total);
+        }
+      })
+    } else {
+      swal("Your cart is safe!");
+    }
+  });
+ })
 </script>
 @endsection

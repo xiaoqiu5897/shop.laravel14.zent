@@ -29,6 +29,6 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        //
+        Event::listen('products.view', 'App\Events\ViewPostHandler');
     }
 }

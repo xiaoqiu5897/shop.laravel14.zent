@@ -97,7 +97,7 @@
       <aside class="main-sidebar sidebar-dark-primary elevation-4" style=" z-index: 1025">
         <!-- Brand Logo -->
         <a href="index3.html" class="brand-link" style="border-bottom: 1px solid white;">
-          <span class="brand-text font-weight-light" style="padding-left: 20px!important;font-weight: 700!important;">MY FOOD BLOG</span>
+          <span class="brand-text font-weight-light" style="padding-left: 20px!important;font-weight: 700!important;">MY SHOP</span>
         </a>
 
         <!-- Sidebar -->
@@ -105,7 +105,6 @@
           <!-- Sidebar user panel (optional) -->
           <div class="user-panel mt-3 pb-3 mb-3 d-flex" style="border-bottom: 1px solid white;">
             <div class="image">
-              <img src="{{asset('blog_assets/img/avata/IMG_9755.JPG')}}" class="img-circle elevation-2" alt="User Image" style="width: 50px">
             </div>
             <div class="info" style="height: 70px">
               <a href="#" class="d-block" style="line-height: 60px; font-size: 40px;font-family: 'Tangerine';">Thu Nguyen</a>
@@ -116,7 +115,7 @@
           <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
               <li class="nav-item">
-                <a href="index.php" class="nav-link">
+                <a href="{{asset('admin')}}" class="nav-link">
                   <i class="nav-icon fa fa-dashboard"></i>
                   <p>
                     Bảng điều khiển
@@ -164,7 +163,7 @@
                 </a>
               </li>
               <li class="nav-item has-treeview">
-                <a href="{{asset('admin/statistics')}}" class="nav-link">
+                <a href="{{asset('admin/statistic')}}" class="nav-link">
                   <i class="nav-icon fa fa-users"></i>
                   <p>
                     Thống kê

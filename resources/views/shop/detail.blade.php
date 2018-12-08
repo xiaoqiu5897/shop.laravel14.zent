@@ -165,7 +165,7 @@
 													<div class="col-md-12">
 														@foreach($product->sizes as $size)
 														<label class="size">
-															<input type="radio" class="size1" name="size" value="{{$size->size}}">
+															<input type="radio" class="size1 product-size" name="size" value="{{$size->size}}">
 															<span class="checkmark">{{$size->size}}</span>
 														</label>
 														@endforeach	
@@ -176,7 +176,7 @@
 											</section>
 											<div class="product-add-to-cart">
 												<div class="add" style="margin-top: 50px">
-													<button data-slug="{{$product->slug}}" class="btn btn-primary add-to-cart add2cart-btn" type="submit">Add to cart</button>
+													<button data-id="{{$product->id}}" class="btn btn-primary add-to-cart add2cart-btn" type="submit">Add to cart</button>
 												</div>
 												<div class="clearfix"></div>
 												<p class="product-minimal-quantity">
@@ -221,9 +221,17 @@
 										<div class="product-description">{{$product->description}}</div>
 									</div>
 									<div class="tab-pane fade" id="product-details" data-product="">
-										{{-- @foreach($product_attributes as $row)
-										<p>{{\Attribute::where('id',$row->attribute_id)->display_name}}{{$row->$value}}</p>
-										@endforeach --}}
+										@foreach($product_attributes as $row1)
+										@foreach($attributes as $row2)
+										@if($row1->attribute_id == $row2->id)
+										<div class="row">
+											<h5 class="col-md-2" style="font-size: 20px;font-weight: bolder;">{{$row2->name}}</h5>
+											<p class="col-md-5" style="font-size: 20px">{{$row1->value}}</p>
+											<p class="col-md-5"></p>
+										</div>
+										@endif
+										@endforeach
+										@endforeach
 									</div>
 								</div>
 							</div>
@@ -293,28 +301,35 @@
 						$('#add2cart-form').submit(function (e) {
 							e.preventDefault();
 							var url = $(this).attr('data-url');
-							var slug = $('.add2cart-btn').attr('data-slug');
-							if ($('.size1').prop('checked')) {
-								var size = $('.size1').val();
-							}
+							var id = $('.add2cart-btn').attr('data-id');
+							$('.product-size').each(function () {
+								if($(this).is(":checked")) {
+									size = $(this).val();
+								}
+							})
 
 							$.ajax({
 								type: 'post',
 								url: url,
 								data:{
-									slug: slug,
+									id: id,
 									size: size
 								},
 								success: function (response) {
-									$('#quantity').html(response.total);
-
+									$('#quantity').html(response.count);
 									swal({
 										title: "Thành công!",
 										text: "Sản phẩm đã được thêm vào giỏ hàng",
 										icon: "success",
 										button: "OK",
 									});
-
+									$.each(response.data, function( key, value ) {
+										$('#cart-item').html('<div class="cart-item"><div class="cart-image"><a href=""><img src="{{asset('assets/img/products')}}/'+value.options.thumbnail+'"></a></div><div class="cart-info"><span class="product-name"><a href="">'+value.name+'</a></span><span class="product-price">'+value.price+'</span><span class="product-quantity">'+value.qty+'</span><a class = "remove-from-cart" rel = "nofollow" href = ""><i class="fa fa-times"></i></a></div></div>');
+									})
+									$('.view-cart-subtotal').html(response.subtotal);
+									$('.view-cart-total').html(response.total);
+									$('.view-cart-tax').html(response.tax);
+									$('.view-cart-quantity').html(response.count);
 								}
 							})
 						})

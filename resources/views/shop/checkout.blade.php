@@ -102,8 +102,13 @@
 										</div>
 									</section>
 									<footer class="form-footer text-xs-center clearfix">
-										<button class="continue btn btn-primary pull-xs-right" name="continue" data-link-action="sign-in" type="submit" value="1">Continue</button>
+										<button class="continue btn btn-primary pull-xs-right" name="continue" data-link-action="sign-in" type="submit" value="1" >Continue</button>
 									</footer>
+									<style type="text/css">
+										.continue:hover{
+											background-color: rgba(71,201,229,0.9)!important;
+										}
+									</style>
 								</form>
 							</div>
 						</div>
@@ -197,24 +202,23 @@
 			var email = $('email-cus').val();
 			var address = $('address-cus').val();
 			var phonenum = $('phone-cus').val();
-			console.log(name);
 			$.ajax({
 				type: 'post',
 				url: '/cart/checkout/billing',
 				data: {
 					name: $('.name-cus').val(),
-					email: $('email-cus').val(),
-					address: $('address-cus').val(),
-					phonenum: $('phone-cus').val()
+					email: $('.email-cus').val(),
+					address: $('.address-cus').val(),
+					phonenum: $('.phone-cus').val()
 				},
 				success: function (response) {
 					swal({
 						title: "Thành công!",
-						text: "Sản phẩm đã được thêm vào giỏ hàng",
+						text: "Đặt hàng thành công",
 						icon: "success",
 						button: "OK",
 					});
-					window.location.href = "{{asset('/')}}";
+					console.log(response);
 				}
 			})
 		})
